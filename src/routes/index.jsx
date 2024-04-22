@@ -5,6 +5,7 @@ import MainLayout from "../layout/Main";
 import LoginPage from "../layout/Auth/LoginPage";
 import { Link as RouterLink } from "react-router-dom";
 import RegisterPage from "../layout/Auth/RegisterPage";
+import AccountModules from "../layout/Profile/AccountModules";
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ export default function Router() {
     },
     { path: "/auth/login", element: (<LoginPage/>) },
     { path: "/auth/register", element: (<RegisterPage/>) },
+    { path: "/personal", element: (<AccountModules/>) },
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
 }

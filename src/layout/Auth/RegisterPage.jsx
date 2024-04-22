@@ -21,6 +21,9 @@ import { useNavigate } from "react-router-dom";
 
 import { useTheme } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
+import PersonalHeader from "../Profile/PersonalHeader";
+import Footer from "../Profile/Footer";
+import { Container } from "@mui/material";
 
 export default function RegisterPage() {
   const theme = useTheme();
@@ -80,7 +83,7 @@ export default function RegisterPage() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if(values.username.length===0){
+    if (values.username.length === 0) {
       setValues((prevValues) => ({
         ...prevValues,
         errors: {
@@ -90,7 +93,7 @@ export default function RegisterPage() {
       }));
       return;
     }
-    if(values.surname.length===0){
+    if (values.surname.length === 0) {
       setValues((prevValues) => ({
         ...prevValues,
         errors: {
@@ -100,7 +103,7 @@ export default function RegisterPage() {
       }));
       return;
     }
-    if(values.name.length===0){
+    if (values.name.length === 0) {
       setValues((prevValues) => ({
         ...prevValues,
         errors: {
@@ -110,7 +113,7 @@ export default function RegisterPage() {
       }));
       return;
     }
-    if(values.email.length===0){
+    if (values.email.length === 0) {
       setValues((prevValues) => ({
         ...prevValues,
         errors: {
@@ -120,7 +123,7 @@ export default function RegisterPage() {
       }));
       return;
     }
-    if(values.password.length===0){
+    if (values.password.length === 0) {
       setValues((prevValues) => ({
         ...prevValues,
         errors: {
@@ -131,7 +134,7 @@ export default function RegisterPage() {
       return;
     }
     const validEmail = validateEmail(values.email);
-    if(validEmail){
+    if (validEmail) {
       setValues((prevValues) => ({
         ...prevValues,
         errors: {
@@ -152,10 +155,8 @@ export default function RegisterPage() {
       }));
       return;
     }
-    
-    
+
     try {
-      
       const postData = {
         email: values.email,
         username: values.username,
@@ -164,13 +165,37 @@ export default function RegisterPage() {
         password: values.password,
       };
       const response = await axios.post(
-        "http://192.168.1.214:8080/auth/sign-up",
+        "http://192.168.1.213:8080/auth/sign-up",
         postData
       );
-
-      navigate("/");
+      sessionStorage.setItem("authToken", "");
+      localStorage.setItem("savedUsername", "");
+      localStorage.setItem("savedPassword", "");
+      localStorage.setItem("activeName", values.username);
+      navigate("/auth/login");
     } catch (error) {
-
+      console.log(error);
+      if (
+        error.response.data.message ===
+        "something went wrong: there is already exist account with such username"
+      ) {
+        setValues({
+          ...values,
+          errors: {
+            username: "There is already exist account with such username",
+          },
+        });
+        return;
+      } else if (
+        error.response.data.message ===
+        "something went wrong: there is already exist account with such email"
+      ) {
+        setValues({
+          ...values,
+          errors: { email: "There is already exist account with such email" },
+        });
+        return;
+      }
     }
   };
   const handleChange = (prop) => (event) => {
@@ -211,163 +236,174 @@ export default function RegisterPage() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          paddingTop: "80px",
-          paddingLeft: "20px",
-          paddingRight: "20px",
-          marginRight: "auto",
-          marginLeft: "auto",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          maxWidth: "440px",
-        }}
-      >
-        <Logo />
-        <Typography sx={{ fontWeight: "700" }} component="h5" variant="h5">
-          Register your account
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
-            value={values.username}
-            autoFocus
-            error={!!values.errors.username}
-            helperText={values.errors.username}
-            onChange={handleChange("username")}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            autoComplete="name"
-            value={values.name}
-            autoFocus
-            error={!!values.errors.name}
-            helperText={values.errors.name}
-            onChange={handleChange("name")}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="surname"
-            label="Surname"
-            name="surname"
-            autoComplete="family-name"
-            value={values.surname}
-            error={!!values.errors.surname}
-            helperText={values.errors.surname}
-            onChange={handleChange("surname")}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={values.email}
-            error={!!values.errors.email}
-            helperText={values.errors.email}
-            onChange={handleChange("email")}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type={values.showPassword ? "text" : "password"}
-            id="password"
-            autoComplete="new-password"
-            value={values.password}
-            onChange={handleChange("password")}
-            error={!!values.errors.password}
-            helperText={values.errors.password}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="confirmPassword"
-            label="Confirm Password"
-            type={values.showConfirmPassword ? "text" : "password"}
-            id="confirmPassword"
-            autoComplete="new-password"
-            value={values.confirmPassword}
-            onChange={handleChange("confirmPassword")}
-            error={!!values.errors.confirmPassword}
-            helperText={values.errors.confirmPassword}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowConfirmPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showConfirmPassword ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleSubmit}
+      <PersonalHeader />
+      <Container maxWidth="xl">
+        <Box
+          sx={{
+            paddingTop: "30px",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            marginRight: "auto",
+            marginLeft: "auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            maxWidth: "440px",
+            paddingBottom:'30px',
+          }}
+        >
+          <Logo />
+          <Typography sx={{ fontWeight: "700" }} component="h5" variant="h5">
+            Register your account
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 1 }}
           >
-            Register
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Typography sx={{ fontWeight: "700" }} variant="subtitle2">
-                Already have an account?{" "}
-                <RouterLink
-                  style={{ color: theme.palette.primary.main }}
-                  to="/auth/login"
-                >
-                  Login
-                </RouterLink>
-              </Typography>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              value={values.username}
+              autoFocus
+              error={!!values.errors.username}
+              helperText={values.errors.username}
+              onChange={handleChange("username")}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              autoComplete="name"
+              value={values.name}
+              autoFocus
+              error={!!values.errors.name}
+              helperText={values.errors.name}
+              onChange={handleChange("name")}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="surname"
+              label="Surname"
+              name="surname"
+              autoComplete="family-name"
+              value={values.surname}
+              error={!!values.errors.surname}
+              helperText={values.errors.surname}
+              onChange={handleChange("surname")}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={values.email}
+              error={!!values.errors.email}
+              helperText={values.errors.email}
+              onChange={handleChange("email")}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type={values.showPassword ? "text" : "password"}
+              id="password"
+              autoComplete="new-password"
+              value={values.password}
+              onChange={handleChange("password")}
+              error={!!values.errors.password}
+              helperText={values.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type={values.showConfirmPassword ? "text" : "password"}
+              id="confirmPassword"
+              autoComplete="new-password"
+              value={values.confirmPassword}
+              onChange={handleChange("confirmPassword")}
+              error={!!values.errors.confirmPassword}
+              helperText={values.errors.confirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showConfirmPassword ? (
+                        <VisibilityOff />
+                      ) : (
+                        <Visibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit}
+            >
+              Register
+            </Button>
+            <Grid container>
+              <Grid item>
+                <Typography sx={{ fontWeight: "700" }} variant="subtitle2">
+                  Already have an account?{" "}
+                  <RouterLink
+                    style={{ color: theme.palette.primary.main }}
+                    to="/auth/login"
+                  >
+                    Login
+                  </RouterLink>
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
+      </Container>
+
+      <Footer bottom={'auto'} />
     </ThemeProvider>
   );
 }

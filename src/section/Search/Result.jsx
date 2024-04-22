@@ -88,6 +88,7 @@ export default function Result() {
       ) : (
         <CardView view={view} value={value} handleChangeTab={handleChangeTab} />
       )}
+      
     </Stack>
   );
 }

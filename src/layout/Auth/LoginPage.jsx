@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,11 +18,16 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Logo from "../../components/Logo";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../contexts/AuthContext";
+
 
 import { useTheme } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
+import PersonalHeader from "../Profile/PersonalHeader";
+import Footer from "../Profile/Footer";
 
 export default function LoginPage() {
+  const { token, setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const [values, setValues] = useState({
@@ -84,6 +89,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
     const usernameError = validateUsername(values.username);
     const passwordError = validatePassword(values.password);
 
@@ -102,52 +108,50 @@ export default function LoginPage() {
       };
 
       const response = await axios.post(
-        "http://192.168.1.214:8080/auth/sign-in",
+        "http://192.168.1.213:8080/auth/sign-in",
         postData
       );
-      console.log("Request was successful!");
-      console.log("Response:", response.data);
-
-      const token = response.data;
-      console.log(token);
+      const token = response.data.token;
       if (token) {
         if (values.rememberMe) {
-          localStorage.setItem("authToken", token);
+          sessionStorage.setItem("authToken", token);
           localStorage.setItem("savedUsername", values.username);
           localStorage.setItem("savedPassword", values.password);
         } else {
           sessionStorage.setItem("authToken", token);
-          localStorage.setItem("savedUsername", '');
-          localStorage.setItem("savedPassword", '');
+          localStorage.setItem("savedUsername", "");
+          localStorage.setItem("savedPassword", "");
         }
+        localStorage.setItem('activeName',values.username);
+        setToken(token);
         navigate("/");
       } else {
         console.log("error message");
       }
     } catch (error) {
-      console.error("Error:", error.message);
-      let errorMessage = error.response?.data?.message || error.message;
-
-      setValues({
-        ...values,
-        errors: {
-          ...values.errors,
-          username: errorMessage.includes("Username")
-            ? errorMessage
-            : values.errors.username,
-          password: errorMessage.includes("Password")
-            ? errorMessage
-            : values.errors.password,
-        },
-      });
+      console.log(error);
+      if (error.response.data.message === "incorrect password") {
+        setValues({
+          ...values,
+          errors: { password: "Password is not correct" },
+        });
+        return;
+      } else if (error.response.data.message === "sql: no rows in result set") {
+        setValues({
+          ...values,
+          errors: { username: "There is no such username" },
+        });
+        return;
+      }
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <PersonalHeader/>
       <Box
         sx={{
-          paddingTop: "80px",
+          paddingTop: "30px",
           paddingLeft: "20px",
           paddingRight: "20px",
           marginRight: "auto",
@@ -168,7 +172,7 @@ export default function LoginPage() {
             required
             fullWidth
             id="username"
-            label="Username"
+            label="Username or Email"
             name="username"
             autoComplete="username"
             value={values.username}
@@ -239,6 +243,7 @@ export default function LoginPage() {
           </Grid>
         </Box>
       </Box>
+      <Footer bottom={'0'}/>
     </ThemeProvider>
   );
 }

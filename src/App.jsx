@@ -11,7 +11,7 @@ import { ProgressBarStyle } from "./components/ProgressBar";
 import NotistackProvider from "./components/NotistackProvider";
 import ThemeColorPresets from "./components/ThemeColorPresets";
 import MotionLazyContainer from "./components/animate/MotionLazyContainer";
-
+import './App.css'
 function App() {
   return (
     <>

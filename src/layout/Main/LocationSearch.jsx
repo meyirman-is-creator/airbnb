@@ -22,6 +22,7 @@ export default function LocationSearch() {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const debouncedInput = useDebounce(inputText, 500);
+
   const fetchLocations = async (text) => {
     const accessToken = MAPBOX_API;
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${accessToken}`;

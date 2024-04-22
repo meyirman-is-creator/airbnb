@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import Logo from "../../components/Logo";
-import Input from "./Input";
 import { faker } from "@faker-js/faker";
 import { Link as RouterLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
@@ -23,7 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Header() {
+export default function PersonalHeader() {
   const { token, setToken } = useContext(AuthContext);
   const [name, setName] = useState(localStorage.getItem("activeName"));
   const theme = useTheme();
@@ -55,7 +54,6 @@ export default function Header() {
           sx={{ px: 3, py: 2 }}
         >
           <Logo />
-          <Input />
           <div className="avatar-logo" style={{ position: "relative" }}>
             {auth ? (
               <svg
@@ -103,7 +101,7 @@ export default function Header() {
                       : "rgba(145, 158, 171, 0.24) 0px 0px 2px 0px, rgba(145, 158, 171, 0.24) -20px 20px 40px",
                 }}
               >
-                {!auth ? (
+                {auth ? (
                   <>
                     <Button
                       style={{
