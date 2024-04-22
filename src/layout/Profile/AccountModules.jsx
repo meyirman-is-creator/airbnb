@@ -1,9 +1,17 @@
 import React from "react";
 import PersonalHeader from "./PersonalHeader";
 import Footer from "./Footer";
-import { Box, Grid, Paper, Typography, Link, Container } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Paper,
+  Typography,
+  Link,
+  Container,
+  Breadcrumbs,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
+import { Link as RouterLink } from "react-router-dom";
 const accountSections = [
   {
     title: "Profile",
@@ -20,7 +28,7 @@ const accountSections = [
         <path d="M9,12c-3.309,0-6-2.691-6-6S5.691,0,9,0s6,2.691,6,6-2.691,6-6,6Zm4.27,7.48c-.813,.813-1.27,1.915-1.27,3.065v1.455h1.455c1.15,0,2.252-.457,3.065-1.27l6.807-6.807c.897-.897,.897-2.353,0-3.25-.897-.897-2.353-.897-3.25,0l-6.807,6.807Zm-3.27,3.065c0-1.692,.659-3.283,1.855-4.479l2.376-2.376c-1.476-1.06-3.279-1.691-5.231-1.691C4.038,14,0,18.038,0,23c0,.552,.448,1,1,1H10v-1.455Z" />
       </svg>
     ),
-    link: "/profile", // Update with your actual routing link
+    link: "/personal/profile", // Update with your actual routing link
   },
   {
     title: "Favorites",
@@ -36,7 +44,7 @@ const accountSections = [
         <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z" />
       </svg>
     ),
-    link: "/favorites", // Update with your actual routing link
+    link: "/personal/favorites", // Update with your actual routing link
   },
   {
     title: "Orders",
@@ -62,22 +70,31 @@ const accountSections = [
         </g>
       </svg>
     ),
-    link: "/orders", // Update with your actual routing link
+    link: "/personal/orders", // Update with your actual routing link
   },
   // ... add other sections as necessary
 ];
 
 export default function AccountModules() {
-  const theme = useTheme(); 
+  const theme = useTheme();
   return (
     <>
       <PersonalHeader />
       <Container>
+        <div style={{ padding: "16px" }}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link component={RouterLink} to="/">
+              Home
+            </Link>
+            <Typography>Personal</Typography>
+          </Breadcrumbs>
+          <h1>Account</h1>
+        </div>
         <Box sx={{ flexGrow: 1, m: 2 }}>
           <Grid container spacing={2}>
             {accountSections.map((section) => (
               <Grid item xs={12} sm={6} md={4} key={section.title}>
-                <Link href={section.link} style={{ textDecoration: "none" }}>
+                <RouterLink to={section.link} style={{ textDecoration: "none" }}>
                   <Paper
                     sx={{
                       p: 2,
@@ -87,7 +104,12 @@ export default function AccountModules() {
                     elevation={3}
                   >
                     {React.cloneElement(section.icon, {
-                      style: { width: 30, height: 30, marginBottom: 1,fill:theme.palette.primary.main  },
+                      style: {
+                        width: 30,
+                        height: 30,
+                        marginBottom: 1,
+                        fill: theme.palette.primary.main,
+                      },
                     })}
 
                     <Typography
@@ -105,13 +127,13 @@ export default function AccountModules() {
                       {section.subtitle}
                     </Typography>
                   </Paper>
-                </Link>
+                </RouterLink>
               </Grid>
             ))}
           </Grid>
         </Box>
       </Container>
-      <Footer bottom={"0"} />
+      <Footer bottom={'0'} />
     </>
   );
 }

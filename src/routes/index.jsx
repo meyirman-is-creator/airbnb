@@ -6,7 +6,9 @@ import LoginPage from "../layout/Auth/LoginPage";
 import { Link as RouterLink } from "react-router-dom";
 import RegisterPage from "../layout/Auth/RegisterPage";
 import AccountModules from "../layout/Profile/AccountModules";
-
+import ProfilePage from "../layout/Profile/ProfilePage";
+import OrdersPage from "../layout/Profile/OrdersPage";
+import FavoritesPage from "../layout/Profile/FavoritesPage";
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) => (props) => {
@@ -26,16 +28,21 @@ export default function Router() {
   return useRoutes([
     {
       path: "/",
-      element: (
-        <MainLayout/>
-      ),
+      element: <MainLayout />,
+      children: [{ element: <HomePage />, index: true }],
+    },
+    { path: "/auth/login", element: <LoginPage /> },
+    { path: "/auth/register", element: <RegisterPage /> },
+    {
+      path: "/personal", // Исправленный путь
+      
       children: [
-        { element: <HomePage />, index: true }
+        {index: true, element: <AccountModules />,},
+        { path: "profile", element: <ProfilePage /> },
+        {path:'orders', element:<OrdersPage/>},
+        {path:'favorites', element:<FavoritesPage/>} // Добавленный префикс "profile"
       ],
     },
-    { path: "/auth/login", element: (<LoginPage/>) },
-    { path: "/auth/register", element: (<RegisterPage/>) },
-    { path: "/personal", element: (<AccountModules/>) },
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
 }
