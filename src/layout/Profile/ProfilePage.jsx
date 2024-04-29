@@ -14,7 +14,7 @@ import PersonalHeader from "./PersonalHeader";
 import Footer from "./Footer";
 import { Link } from "@mui/material";
 import AuthContext from "../../contexts/AuthContext";
-
+let object;
 export default function ProfilePage() {
   const [profileData, setProfileData] = useState({
     name: "",
@@ -26,7 +26,19 @@ export default function ProfilePage() {
     newPassword: "",
     confirmPassword: "",
   });
+  const [oldPassword, setOldPassword] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [surname, setSurname] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [formData, setFormData] = useState({ ...profileData }); // Initialize formData with profileData
   const { token, setToken } = useContext(AuthContext);
+
+  const [isDataChanged, setIsDataChanged] = useState(false); // State to track if data has been changed
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,9 +49,27 @@ export default function ProfilePage() {
             Authorization: `Bearer ${accessToken}`,
           },
         };
-        const response = await axios.get("http://192.168.1.213:8080/my/", config);
+        const response = await axios.get(
+          "http://192.168.1.213:8080/my/",
+          config
+        );
         const data = response.data.data;
-        setProfileData(data);
+        object = {
+          Phone: data.Phone,
+          email: data.email,
+          id: data.email,
+          name: data.name,
+          role_id: data.role_id,
+          surname: data.surname,
+          username: data.username,
+        };
+        setPhonenumber(data.Phone);
+        setEmail(data.email);
+        setName(data.name);
+        setSurname(data.surname);
+        setUsername(data.username);
+        setFormData(object);
+        console.log(formData);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -48,17 +78,77 @@ export default function ProfilePage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (
+      phonenumber !== object?.Phone ||
+      oldPassword !== "" ||
+      newPassword !== "" ||
+      confirmPassword !== "" ||
+      name !== object?.name ||
+      surname !== object?.surname ||
+      username !== object?.username ||
+      email !== object?.email
+    ) {
+      setIsDataChanged(true);
+    } else {
+      setIsDataChanged(false);
+    }
+  }, [
+    phonenumber,
+    oldPassword,
+    newPassword,
+    confirmPassword,
+    name,
+    surname,
+    username,
+    email,
+  ]);
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfileData({
-      ...profileData,
+    if (name === "phonenumber") {
+      setPhonenumber(value);
+    } else if (name === "oldPassword") {
+      setOldPassword(value);
+    } else if (name === "newPassword") {
+      setNewPassword(value);
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
+    } else if (name === "name") {
+      setName(value);
+    } else if (name === "surname") {
+      setSurname(value);
+    } else if (name === "username") {
+      setUsername(value);
+    } else if (name === "email") {
+      setEmail(value);
+    }
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission here
+    const accessToken = sessionStorage.getItem("authToken");
+    const body = {
+      name: name,
+      surname: surname,
+      username: username,
+      password: newPassword,
+      old_password: oldPassword,
+    };  
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const response = await axios.put(
+      "http://192.168.1.213:8080/my/",
+      body,config,
+      
+    );
   };
 
   return (
@@ -84,7 +174,7 @@ export default function ProfilePage() {
                   label="Name"
                   name="name"
                   onChange={handleChange}
-                  value={profileData.name}
+                  value={formData.name}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -93,7 +183,7 @@ export default function ProfilePage() {
                   label="Username"
                   name="username"
                   onChange={handleChange}
-                  value={profileData.username}
+                  value={formData.username}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -102,7 +192,7 @@ export default function ProfilePage() {
                   label="Email"
                   name="email"
                   onChange={handleChange}
-                  value={profileData.email}
+                  value={formData.email}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -111,7 +201,7 @@ export default function ProfilePage() {
                   label="Surname"
                   name="surname"
                   onChange={handleChange}
-                  value={profileData.surname}
+                  value={formData.surname}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -120,7 +210,7 @@ export default function ProfilePage() {
                   label="Phone Number"
                   name="phonenumber"
                   onChange={handleChange}
-                  value={profileData.phonenumber}
+                  value={formData.phonenumber}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -130,7 +220,7 @@ export default function ProfilePage() {
                   name="oldPassword"
                   type="password"
                   onChange={handleChange}
-                  value={profileData.oldPassword}
+                  value={formData.oldPassword}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -140,7 +230,7 @@ export default function ProfilePage() {
                   name="newPassword"
                   type="password"
                   onChange={handleChange}
-                  value={profileData.newPassword}
+                  value={formData.newPassword}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -150,11 +240,18 @@ export default function ProfilePage() {
                   name="confirmPassword"
                   type="password"
                   onChange={handleChange}
-                  value={profileData.confirmPassword}
+                  value={formData.confirmPassword}
                 />
               </Grid>
             </Grid>
-            <Button type="submit" variant="contained" color="primary" sx={{marginTop:'20px'}}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ marginTop: "20px" }}
+              disabled={!isDataChanged}
+              // Disable button if no changes or if phoneNumber, oldPassword, newPassword, or confirmPassword have no values
+            >
               Save Changes
             </Button>
           </form>
@@ -164,12 +261,3 @@ export default function ProfilePage() {
     </>
   );
 }
-// let object = {
-//   Phone: null,
-//   email: "maskeugalievd@gmail.com",
-//   id: 0,
-//   name: "Dauren",
-//   roleId: 0,
-//   surname: "Maskeugaliyev",
-//   username: "senitapqan",
-// };

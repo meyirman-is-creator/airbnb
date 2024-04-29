@@ -9,6 +9,7 @@ import AccountModules from "../layout/Profile/AccountModules";
 import ProfilePage from "../layout/Profile/ProfilePage";
 import OrdersPage from "../layout/Profile/OrdersPage";
 import FavoritesPage from "../layout/Profile/FavoritesPage";
+import DetailsPage from "../layout/DetailPage";
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) => (props) => {
@@ -43,6 +44,7 @@ export default function Router() {
         {path:'favorites', element:<FavoritesPage/>} // Добавленный префикс "profile"
       ],
     },
+    {path:'/detail',element: <DetailsPage/>},
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
 }
