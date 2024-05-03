@@ -38,8 +38,8 @@ export default function Router() {
       path: "/personal", // Исправленный путь
       
       children: [
-        {index: true, element: <AccountModules />,},
-        { path: "profile", element: <ProfilePage /> },
+        {index: true, element: <AccountModules />},
+        {path: "profile", element: <ProfilePage /> },
         {path:'orders', element:<OrdersPage/>},
         {path:'favorites', element:<FavoritesPage/>} // Добавленный префикс "profile"
       ],
