@@ -165,7 +165,7 @@ export default function RegisterPage() {
         password: values.password,
       };
       const response = await axios.post(
-        "http://172.20.10.2:8080/auth/sign-up",
+        "http://192.168.0.213:8080/auth/sign-up",
         postData
       );
       sessionStorage.setItem("authToken", "");

@@ -15,15 +15,15 @@ import { Heart, Star } from "phosphor-react";
 import { Bathtub, Bed, MapPin } from "@phosphor-icons/react";
 
 const images = [
-  "https://movia.media/wp-content/uploads/2020/04/billboard-2-768x432.jpg",
-  "https://masterbundles.com/wp-content/uploads/2023/12/untitled-2-748.jpg",
-  "https://mir-s3-cdn-cf.behance.net/project_modules/fs/c8715b127698925.614776edf3f18.jpg",
-  "https://mir-s3-cdn-cf.behance.net/projects/404/6b153c182980621.Y3JvcCw0MDk3LDMyMDUsNjE4LDA.jpg",
-  "https://mir-s3-cdn-cf.behance.net/projects/404/dd92c2166397633.Y3JvcCw0NDYzLDM0OTEsMjY1LDA.jpg",
-  "https://i.pinimg.com/474x/73/c2/6d/73c26db87c87eb9ed2308ec3286bc6c1.jpg",
-  "https://www.gregorczyk.co.uk/img-get2/I0000xBZ1bbHNb6k/fit=1000x750/McDonalds-Spicy-Chicken-Range-Billboard.jpg",
-  "https://dorea.org/wp-content/uploads/2017/01/bilboard.jpg",
-  "https://www.scrolldroll.com/wp-content/uploads/2022/04/mccafe-best-mcdonalds-ads.jpg",
+  "https://i.pinimg.com/originals/6d/89/87/6d89870c4ed04149f409698b1dfe5a60.jpg",
+  "https://homeadore.com/wp-content/uploads/2017/04/004-rising-ridge-residence-architects.jpg",
+  "https://klike.net/uploads/posts/2023-03/1679457956_3-11.jpg",
+  "https://klike.net/uploads/posts/2023-03/1679457964_2-2.jpg",
+  "https://w.forfun.com/fetch/50/501ec91cd9e77c8a9e58f788f1c67451.jpeg?w=1470&r=0.5625",
+  "https://img.razrisyika.ru/kart/89/354558-krasivyy-dom-11.jpg",
+  "https://img.razrisyika.ru/kart/65/1200/258949-dvuhetazhnyy-dom-23.jpg",
+  "https://assets.architecturaldesigns.com/plan_assets/21093/original/21093DR_1524152558.jpg",
+  "https://mykaleidoscope.ru/uploads/posts/2022-07/1658197588_44-mykaleidoscope-ru-p-dom-moei-mechti-dizain-krasivo-foto-44.jpg ",
 ];
 export default function Properties({view}) {
   const theme = useTheme();
