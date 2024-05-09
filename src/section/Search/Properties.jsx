@@ -11,8 +11,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Heart, Star } from "phosphor-react";
-import { Bathtub, Bed, MapPin } from "@phosphor-icons/react";
+import { Link } from "react-router-dom";
+import { Star, Heart, MapPin, Bed, Bathtub } from "phosphor-react";
 
 const images = [
   "https://i.pinimg.com/originals/6d/89/87/6d89870c4ed04149f409698b1dfe5a60.jpg",
@@ -25,139 +25,151 @@ const images = [
   "https://assets.architecturaldesigns.com/plan_assets/21093/original/21093DR_1524152558.jpg",
   "https://mykaleidoscope.ru/uploads/posts/2022-07/1658197588_44-mykaleidoscope-ru-p-dom-moei-mechti-dizain-krasivo-foto-44.jpg ",
 ];
-export default function Properties({view}) {
+export default function Properties({ view }) {
   const theme = useTheme();
   return (
     <Box>
       <Grid container spacing={2}>
         {[...Array(9)].map((elm, index) => (
-          <Grid xs={12} md={view==='map'?12:6} item key={index}>
-            <Card>
-              <Box sx={{ position: "relative" }}>
-                <CardMedia
-                  sx={{ height: 320 }}
-                  title="Villa"
-                  image={images[index]}
-                />
-                <Chip
-                  sx={{
-                    position: "absolute",
-                    top: 10,
-                    left: 10,
-                    color: theme.palette.common.white,
-                    bgcolor: alpha(theme.palette.common.black, 0.4),
-                  }}
-                  icon={
-                    <Star
-                      style={{
-                        color: theme.palette.warning.dark,
-                      }}
-                      weight="fill"
-                    />
-                  }
-                  label={4.5}
-                />
-                <IconButton
-                  sx={{
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                  }}
-                >
-                  <Heart
-                    style={{
-                      color: theme.palette.error.main,
-                    }}
+          <Grid xs={12} md={view === "map" ? 12 : 6} item key={index}>
+            <Link to="/detail" style={{ textDecoration: "none" }}>
+              <Card>
+                <Box sx={{ position: "relative" }}>
+                  <CardMedia
+                    sx={{ height: 320 }}
+                    title="Villa"
+                    image={images[index]}
                   />
-                </IconButton>
-              </Box>
-              <CardContent>
-                <Stack spacing={1} >
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
+                  <Chip
+                    sx={{
+                      position: "absolute",
+                      top: 10,
+                      left: 10,
+                      color: theme.palette.common.white,
+                      bgcolor: alpha(theme.palette.common.black, 0.4),
+                    }}
+                    icon={
+                      <Star
+                        style={{ color: theme.palette.warning.dark }}
+                        weight="fill"
+                      />
+                    }
+                    label={4.5}
+                  />
+                  <IconButton
+                    sx={{
+                      position: "absolute",
+                      top: 10,
+                      right: 10,
+                    }}
                   >
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: 16,
-                        color: "text.secondary",
-                      }}
+                    <Heart style={{ color: theme.palette.error.main }} />
+                  </IconButton>
+                </Box>
+                <CardContent>
+                  <Stack spacing={1}>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
                     >
-                      Place to stay
-                    </Typography>
-                    <Stack direction="row" spacing={0.5} alignItems="center">
                       <Typography
-                        variant="subtitle1"
+                        variant="subtitle2"
                         sx={{
-                          fontWeight: 500,
-                          fontSize: 18,
+                          fontWeight: 600,
+                          fontSize: 16,
                           color: "text.secondary",
-                          textDecoration: "line-through",
                         }}
                       >
-                        $80
+                        Place to stay
                       </Typography>
-                      <Stack direction="row" alignItems="center">
+                      <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography
-                          variant="subtitle2"
+                          variant="subtitle1"
                           sx={{
+                            fontWeight: 500,
                             fontSize: 18,
                             color: "text.secondary",
+                            textDecoration: "line-through",
                           }}
                         >
-                          $67
+                          $80
                         </Typography>
-                        <Typography variant="caption">/Night</Typography>
+                        <Stack direction="row" alignItems="center">
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontSize: 18,
+                              color: "text.secondary",
+                            }}
+                          >
+                            $67
+                          </Typography>
+                          <Typography variant="caption">/Night</Typography>
+                        </Stack>
+                        <Divider
+                          orientation="vertical"
+                          sx={{
+                            height: 20,
+                          }}
+                        />
+                        <Typography variant="subtitle1">$111 Total</Typography>
                       </Stack>
-                      <Divider
-                        orientation="vertical"
-                        sx={{
-                          height: 20,
-                        }}
-                      />
-                      <Typography variant="subtitle1">$111 Total</Typography>
+                    </Stack>
+                    <Stack spacing={1} direction="row" alignItems="center">
+                      <MapPin weight="bold" />
+                      <Typography variant="subtitle2">
+                        Toronto, Canada
+                      </Typography>
+                    </Stack>
+                    <Divider />
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Bed
+                          size={20}
+                          weight="bold"
+                          style={{ color: theme.palette.grey[600] }}
+                        />
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ color: "text.secondary" }}
+                        >
+                          6 beds
+                        </Typography>
+                      </Stack>
+                      <Divider orientation="vertical" sx={{ height: 15 }} />
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Bathtub
+                          size={20}
+                          weight="bold"
+                          style={{ color: theme.palette.grey[600] }}
+                        />
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ color: "text.secondary" }}
+                        >
+                          1 Bath
+                        </Typography>
+                      </Stack>
+                      <Divider orientation="vertical" sx={{ height: 15 }} />
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Bed
+                          size={20}
+                          weight="bold"
+                          style={{ color: theme.palette.grey[600] }}
+                        />
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ color: "text.secondary" }}
+                        >
+                          3 Bedroom
+                        </Typography>
+                      </Stack>
                     </Stack>
                   </Stack>
-                  <Stack spacing={1} direction="row" alignItems="center">
-                    <MapPin weight="bold" />
-                    <Typography variant="subtitle2">Toronto, Canada</Typography>
-                  </Stack>
-                  <Divider />
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Bed
-                        size={20}
-                        weight="bold"
-                        style={{ color: theme.palette.grey[600] }}
-                      />
-                      <Typography variant="subtitle2" sx={{color:'text.secondary'}}>6 beds</Typography>
-                    </Stack>
-                    <Divider orientation="vertical" sx={{height:15}}/>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Bathtub
-                        size={20}
-                        weight="bold"
-                        style={{ color: theme.palette.grey[600] }}
-                      />
-                      <Typography variant="subtitle2" sx={{color:'text.secondary'}}>1 Bath</Typography>
-                    </Stack>
-                    <Divider orientation="vertical" sx={{height:15}}/>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Bed
-                        size={20}
-                        weight="bold"
-                        style={{ color: theme.palette.grey[600] }}
-                      />
-                      <Typography variant="subtitle2" sx={{color:'text.secondary'}}>3 Bedroom</Typography>
-                    </Stack>
-                  </Stack>
-
-                </Stack>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           </Grid>
         ))}
       </Grid>
